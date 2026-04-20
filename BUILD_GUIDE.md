@@ -26,7 +26,7 @@ Double-click **build.bat**. It will:
 3. Run PyInstaller using the spec file
 4. Output: `dist\WizControl.exe`
 
-The resulting exe is fully self-contained — no Python or pip needed on the end user's machine.
+exe now fully self-contained no Python or pip needed on the end user's machine
 
 ---
 
