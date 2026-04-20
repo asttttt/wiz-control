@@ -5,7 +5,7 @@ Control WiZ smart bulbs from Windows along with f.lux unofficial support
 
 ## Color Control
 - HSV color picker with live preview
-- 5 preset slots for quick recall
+- 5 preset slots
 <img width="374" height="301" alt="image" src="https://github.com/user-attachments/assets/94d17557-99bc-4b36-8d82-411b3d2b71b5" />
 
 
