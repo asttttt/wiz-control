@@ -4,13 +4,13 @@
 
 | Tool | Where to get |
 |------|-------------|
-| Python 3.10+ | https://python.org/downloads — tick **Add to PATH** |
+| Python 3.10+ | https://python.org/downloads - tick **Add to PATH** |
 | Inno Setup | https://jrsoftware.org/isinfo.php |
-| UPX (optional, smaller exe) | https://upx.github.io — add to PATH |
+| UPX (optional, smaller exe) | https://upx.github.io - add to PATH |
 
 ---
 
-## Step 1 — Build the exe
+## Step 1 - Build the exe
 
 Put all these files in the same folder:
 ```
@@ -30,7 +30,7 @@ exe now fully self-contained no Python or pip needed on the end user's machine
 
 ---
 
-## Step 2 — Create the installer (optional)
+## Step 2 - Create the installer (optional)
 
 1. Install **Inno Setup**
 2. Open `wiz_control_installer.iss` in Inno Setup Compiler
