@@ -1,5 +1,5 @@
 # wiz-control
-Control WiZ smart bulbs from Windows along with f.lux unofficial support
+Control WiZ smart bulbs from Windows locally along with f.lux unofficial support
 
 # Features
 
@@ -45,17 +45,35 @@ Control WiZ smart bulbs from Windows along with f.lux unofficial support
 
 **Requirements:**
 - Windows 10/11
-- Bulbs on same network as PC
+- Bulbs connected to same network as PC
+
+**Note:** This app controls bulbs over your local network, not through WiZ cloud servers. Your bulbs stay on your network.
 
 
 # Setup Guide
 
+## Getting Bulb IP Addresses
+
+You need to enable local communication and get the IP address for each bulb:
+
+1. Open the WiZ V2 app → Home tab
+2. Tap "..." (three dots) in top right → Settings
+3. Go to Security in "My room (or whatebvery your room is called)"
+4. Enable "Allow local communication"
+5. Go back → Clock on Lights → select a bulb
+6. Tap the dropdown icon on the right
+7. Tap "Device info" → copy the IP address
+8. Repeat steps 5-7 for all your bulbs (up to 5)
+9. Make sure "Allow local communication" is enabled for all Rooms you want to control
+
+## Configuring WizControl
+
 1. Click `+` to add bulb slots
    <img width="486" height="143" alt="image" src="https://github.com/user-attachments/assets/0aeaaad6-3a6f-406d-b438-49b36d03a8b5" />
 
-3. Enter bulb IP addresses (find in WiZ app or router)
-4. Use "Status" button to verify connection
-5. Select target bulbs using "Send to" dropdown
+2. Enter the IP addresses you copied from the WiZ app
+3. Use "Status" button to verify connection
+4. Select target bulbs using "Send to" dropdown
 
 
 ## f.lux Bridge Setup
@@ -66,10 +84,10 @@ Control WiZ smart bulbs from Windows along with f.lux unofficial support
      <img width="494" height="129" alt="image" src="https://github.com/user-attachments/assets/17f41e77-ae93-43fe-abdc-ceef6b183020" />
 
 
-5. Press Start in WiZ Control
+3. Press Start in WiZ Control
    <img width="374" height="214" alt="image" src="https://github.com/user-attachments/assets/86234c94-0c17-4f0f-8a52-1a01cc1c85a0" />
 
-7. Bulbs now follow f.lux temperature
+4. Bulbs now follow f.lux temperature
 
 ## Building from Source
 
