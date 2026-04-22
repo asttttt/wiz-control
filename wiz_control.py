@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import tkinter as tk
 import colorsys, socket, json, threading, os
-import pathlib, json as _json, sys
+import pathlib, json as _json, sys, argparse
 from PIL import Image, ImageDraw
 
 def _app_data_dir() -> pathlib.Path:
@@ -989,6 +989,166 @@ def _on_close():
         _tray_started[0]=True
         threading.Thread(target=_start_tray,daemon=True).start()
     app.after(250, lambda:app.withdraw() if _tray_ready[0] else None)
+
+# ── CLI Mode ───────────────────────────────────────────────────────────
+def _cli_mode():
+    parser = argparse.ArgumentParser(
+        prog='WizControl',
+        description='Control WiZ smart bulbs from command line',
+        epilog='Bulb numbers are 1-5 (slot numbers). Use "all" to target all bulbs.'
+    )
+    
+    # Power commands
+    parser.add_argument('--on', nargs='*', metavar='BULB', help='Turn on bulbs (e.g., --on 1 2 3 or --on all)')
+    parser.add_argument('--off', nargs='*', metavar='BULB', help='Turn off bulbs (e.g., --off 1 2 or --off all)')
+    
+    # Color commands
+    parser.add_argument('--color', nargs=3, type=int, metavar=('H', 'S', 'V'), 
+                       help='Set HSV color (H:0-360, S:0-100, V:0-100)')
+    parser.add_argument('--cct', type=int, metavar='KELVIN', 
+                       help='Set color temperature in Kelvin (2200-6500)')
+    parser.add_argument('--brightness', type=int, metavar='PCT', 
+                       help='Set brightness 0-100%%')
+    
+    # Target selection for color/cct/brightness
+    parser.add_argument('--bulbs', nargs='+', metavar='BULB', 
+                       help='Target bulbs for color/cct/brightness (e.g., --bulbs 1 2 or --bulbs all)')
+    
+    # f.lux bridge
+    parser.add_argument('--flux', choices=['start', 'stop'], 
+                       help='Start or stop f.lux bridge')
+    
+    args = parser.parse_args()
+    
+    # Check if any CLI args provided
+    if not any([args.on is not None, args.off is not None, args.color, args.cct, 
+                args.brightness, args.flux]):
+        return False  # No CLI args, launch GUI
+    
+    # Load bulb IPs from disk (CLI mode doesn't use tk variables)
+    slots_file = _app_data_dir() / "wiz_slots.json"
+    bulb_ips = []
+    try:
+        data = _json.loads(slots_file.read_text())
+        bulb_ips = [str(x) for x in (data.get("bulbs") or []) if x]
+    except:
+        pass
+    
+    if not bulb_ips and not args.flux:
+        print("Error: No bulbs configured. Add bulbs using GUI first.")
+        sys.exit(1)
+    
+    # Helper to send UDP in CLI mode
+    def cli_send_udp(payload, ip):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.settimeout(1)
+            s.sendto(json.dumps(payload).encode(), (ip, BULB_PORT))
+            s.recvfrom(1024)
+            s.close()
+            return True
+        except:
+            return False
+    
+    # Helper to parse bulb numbers
+    def parse_bulbs(bulb_list):
+        if not bulb_list:
+            return list(range(len(bulb_ips)))  # All bulbs
+        if 'all' in bulb_list:
+            return list(range(len(bulb_ips)))
+        indices = []
+        for b in bulb_list:
+            try:
+                num = int(b)
+                if 1 <= num <= len(bulb_ips):
+                    indices.append(num - 1)  # Convert to 0-indexed
+                else:
+                    print(f"Warning: Bulb {num} out of range (1-{len(bulb_ips)}), skipping")
+            except ValueError:
+                print(f"Warning: Invalid bulb number '{b}', skipping")
+        return indices
+    
+    # Execute commands
+    success = True
+    
+    # Power on
+    if args.on is not None:
+        indices = parse_bulbs(args.on if args.on else None)
+        for i in indices:
+            ip = bulb_ips[i]
+            result = cli_send_udp({"method": "setPilot", "params": {"state": True}}, ip)
+            print(f"Bulb {i+1} ({ip}): {'ON' if result else 'FAILED'}")
+            success = success and result
+    
+    # Power off
+    if args.off is not None:
+        indices = parse_bulbs(args.off if args.off else None)
+        for i in indices:
+            ip = bulb_ips[i]
+            result = cli_send_udp({"method": "setPilot", "params": {"state": False}}, ip)
+            print(f"Bulb {i+1} ({ip}): {'OFF' if result else 'FAILED'}")
+            success = success and result
+    
+    # Color
+    if args.color:
+        h, s, v = args.color
+        if not (0 <= h <= 360 and 0 <= s <= 100 and 0 <= v <= 100):
+            print("Error: Invalid HSV values. H:0-360, S:0-100, V:0-100")
+            sys.exit(1)
+        
+        indices = parse_bulbs(args.bulbs if args.bulbs else None)
+        r, g, b = colorsys.hsv_to_rgb(h / 360.0, s / 100.0, v / 100.0)
+        payload = {"method": "setPilot", "params": {"r": int(r * 255), "g": int(g * 255), "b": int(b * 255), "dimming": v}}
+        
+        for i in indices:
+            ip = bulb_ips[i]
+            result = cli_send_udp(payload, ip)
+            print(f"Bulb {i+1} ({ip}): Color set to H{h}°S{s}%V{v}% {'✓' if result else '✗'}")
+            success = success and result
+    
+    # CCT
+    if args.cct:
+        if not (2200 <= args.cct <= 6500):
+            print("Error: CCT must be between 2200-6500 Kelvin")
+            sys.exit(1)
+        
+        indices = parse_bulbs(args.bulbs if args.bulbs else None)
+        payload = {"method": "setPilot", "params": {"temp": args.cct}}
+        
+        for i in indices:
+            ip = bulb_ips[i]
+            result = cli_send_udp(payload, ip)
+            print(f"Bulb {i+1} ({ip}): CCT set to {args.cct}K {'✓' if result else '✗'}")
+            success = success and result
+    
+    # Brightness
+    if args.brightness is not None:
+        if not (0 <= args.brightness <= 100):
+            print("Error: Brightness must be between 0-100")
+            sys.exit(1)
+        
+        indices = parse_bulbs(args.bulbs if args.bulbs else None)
+        payload = {"method": "setPilot", "params": {"dimming": args.brightness}}
+        
+        for i in indices:
+            ip = bulb_ips[i]
+            result = cli_send_udp(payload, ip)
+            print(f"Bulb {i+1} ({ip}): Brightness set to {args.brightness}% {'✓' if result else '✗'}")
+            success = success and result
+    
+    # f.lux bridge
+    if args.flux:
+        if args.flux == 'start':
+            print("f.lux bridge cannot be started in CLI mode (GUI required)")
+            success = False
+        else:
+            print("f.lux bridge stopped (if it was running)")
+    
+    sys.exit(0 if success else 1)
+
+# Check for CLI mode before GUI init
+if len(sys.argv) > 1:
+    _cli_mode()
 
 app.protocol("WM_DELETE_WINDOW",_on_close)
 
