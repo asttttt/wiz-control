@@ -21,10 +21,10 @@
 ; ────────────────────────────────────────────────────────────────────────────
 
 #define AppName      "WizControl"
-#define AppVersion   "4.2"
+#define AppVersion   "4.3"
 #define AppPublisher "Arif"
 #define AppExeName   "WizControl.exe"
-#define AppURL       "https://github.com/yourusername/wiz_control"
+#define AppURL       "https://github.com/asttttt/wiz-control"
 
 [Setup]
 AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}}
