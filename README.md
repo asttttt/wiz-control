@@ -6,20 +6,23 @@ Control WiZ smart bulbs from Windows locally along with f.lux unofficial support
 ## Color Control
 - HSV color picker with live preview
 - 5 preset slots
-<img width="374" height="301" alt="image" src="https://github.com/user-attachments/assets/94d17557-99bc-4b36-8d82-411b3d2b71b5" />
+<img width="374" height="301" alt="3En5dRHXvn" src="https://github.com/user-attachments/assets/991657e0-08ee-4bf5-8006-f71d83996080" />
+
 
 
 ## CCT Temperature
 - 2200K to 6500K range
 - 5 preset slots
-<img width="374" height="278" alt="image" src="https://github.com/user-attachments/assets/99800a7e-64f2-4b9d-8d45-82643153ab25" />
+<img width="374" height="278" alt="cyUa00zie9" src="https://github.com/user-attachments/assets/90294774-7e13-47b4-b4d3-47a0c8cfa950" />
+
 
 
    
 ## f.lux Integration
 - Auto-sync bulbs to f.lux color temperature
 - HTTP bridge listens on localhost
-<img width="374" height="214" alt="image" src="https://github.com/user-attachments/assets/ea58e556-c2eb-41af-8cfa-d86c36ae3938" />
+<img width="374" height="214" alt="hcDs5qzxwQ" src="https://github.com/user-attachments/assets/db9937d0-f05d-4ad2-a8a8-0b8726ee3060" />
+
 
 
 ### Multi-Bulb Connections 
@@ -32,7 +35,8 @@ Control WiZ smart bulbs from Windows locally along with f.lux unofficial support
 ### Run in Background 
 - Minimizes to tray instead of closing
 - Quick access from notification area
-<img width="100" height="49" alt="image" src="https://github.com/user-attachments/assets/dbf31681-0824-4823-92d7-0eda547313c8" />
+<img width="100" height="49" alt="44VsNAs87Q" src="https://github.com/user-attachments/assets/e5edc63a-534f-47e8-9eb9-ef9c7e2f9b92" />
+
 
 
 # Installation
@@ -69,7 +73,7 @@ You need to enable local communication and get the IP address for each bulb:
 ## Configuring WizControl
 
 1. Click `+` to add bulb slots
-   <img width="486" height="143" alt="image" src="https://github.com/user-attachments/assets/0aeaaad6-3a6f-406d-b438-49b36d03a8b5" />
+  <img width="486" height="143" alt="sq3dCJa2y9" src="https://github.com/user-attachments/assets/d039bc96-dd05-4a34-864b-fc08ebef1c08" />
 
 2. Enter the IP addresses you copied from the WiZ app
 3. Use "Status" button to verify connection
@@ -79,13 +83,17 @@ You need to enable local communication and get the IP address for each bulb:
 ## f.lux Bridge Setup
 
 1. Open f.lux → Options and Smart Lighting → Connected Lighting 
-    <img width="554" height="362" alt="image" src="https://github.com/user-attachments/assets/a50a3760-d67a-4743-95db-fd9a0f07e7ec" />
+   <img width="554" height="362" alt="xhxGQ3hNGN" src="https://github.com/user-attachments/assets/484cccbd-ffc1-4112-a834-62bb0f81f909" />
+
 2. Set URL: `http://localhost:8888` or other ports
-     <img width="494" height="129" alt="image" src="https://github.com/user-attachments/assets/17f41e77-ae93-43fe-abdc-ceef6b183020" />
+<img width="494" height="129" alt="dRplAQITh4" src="https://github.com/user-attachments/assets/f55b964c-2949-47a1-b45d-1b76c15a52bc" />
+
+
 
 
 3. Press Start in WiZ Control
-   <img width="374" height="214" alt="image" src="https://github.com/user-attachments/assets/86234c94-0c17-4f0f-8a52-1a01cc1c85a0" />
+   <img width="374" height="214" alt="FsCGr5kRbx" src="https://github.com/user-attachments/assets/84d888f1-0e54-4ca9-bd0a-1cf8dd30781e" />
+
 
 4. Bulbs now follow f.lux temperature
 
