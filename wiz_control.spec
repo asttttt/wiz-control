@@ -64,5 +64,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    # icon='wiz_control.ico',  # uncomment this and add an .ico file
+    # icon='wiz_control.ico',  # uncomment and add an .ico file to use it if u want
 )
