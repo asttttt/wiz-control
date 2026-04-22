@@ -89,6 +89,57 @@ You need to enable local communication and get the IP address for each bulb:
 
 4. Bulbs now follow f.lux temperature
 
-## Building from Source
+# CLI Usage
 
-See [BUILD_GUIDE.md](BUILD_GUIDE.md)
+WizControl can be controlled from command line by:
+
+## Power Control
+
+```bash
+# Turn on specific bulbs
+WizControl.exe --on 1 2 3
+
+# Turn on all bulbs
+WizControl.exe --on all
+WizControl.exe --on
+
+# Turn off bulbs
+WizControl.exe --off 1 2
+WizControl.exe --off all
+```
+
+## Color Control
+
+```bash
+# Set HSV color (H: 0-360, S: 0-100, V: 0-100)
+WizControl.exe --color 120 100 80 --bulbs 1 2
+WizControl.exe --color 240 50 100 --bulbs all
+
+# Set color temperature (2200-6500 Kelvin)
+WizControl.exe --cct 3500 --bulbs 1
+WizControl.exe --cct 6500 --bulbs all
+
+# Set brightness (0-100%)
+WizControl.exe --brightness 50 --bulbs 1 2
+WizControl.exe --brightness 100 --bulbs all
+```
+
+## Examples
+
+```bash
+# Turn on all bulbs with warm white
+WizControl.exe --on all --cct 2700
+
+# Set bulb 1 to red at 50% brightness
+WizControl.exe --color 0 100 50 --bulbs 1
+
+# Turn off bulbs 2 and 3
+WizControl.exe --off 2 3
+```
+
+## Notes
+
+- Bulbs must be configured in GUI first
+- Bulb/light numbers are 1-5 (matching slot numbers in GUI)
+- CLI mode doesn't launch GUI
+
