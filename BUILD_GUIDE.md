@@ -1,6 +1,6 @@
 # Build Guide
 
-## What you need
+## What you will need
 
 | Tool | Where to get |
 |------|-------------|
